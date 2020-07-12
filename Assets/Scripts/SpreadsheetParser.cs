@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.IO;
 
 public class SpreadsheetParser : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class SpreadsheetParser : MonoBehaviour
     [HideInInspector]
     public int currentTextIndex = 0;
     private bool pickNewNum = false;
-
+    private string path;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,8 @@ public class SpreadsheetParser : MonoBehaviour
         }
 
         Debug.Log("The count of promptDictionary is " + promptDictionary.Count);
+
+       path = Application.dataPath + "/log.txt";
 
     }
 
@@ -55,7 +58,6 @@ public class SpreadsheetParser : MonoBehaviour
     {
 
         List<int> keys = new List<int>(promptDictionary.Keys);
-        Debug.Log("The length of keys is " + keys.Count);
         int rand = keys[Random.Range(0, keys.Count)];
         return rand;
        
@@ -65,5 +67,35 @@ public class SpreadsheetParser : MonoBehaviour
     public void RemoveDictionaryKey(int index)
     {
         promptDictionary.Remove(index);
+    }
+
+    public void WritePromptToFile(int index)
+    {
+        string thisDictKey = "";
+        string[] tempStringArrayHolder = promptDictionary[index];
+        for (int k = 0; k < tempStringArrayHolder.Length; k++)
+        {
+            thisDictKey = thisDictKey + tempStringArrayHolder[k] + " ";
+        }
+        
+        File.AppendAllText(path, thisDictKey);
+        Debug.Log("Just added to file: " + thisDictKey);
+    }
+
+    public void WriteNameToFile(string camperName)
+    {
+        if (!File.Exists(path))
+        {
+            File.WriteAllText(path, "Letter writer: " + camperName + "\n");
+        }
+        else
+        {
+            File.AppendAllText(path, "Letter writer: " + camperName + "\n");
+        }
+    }
+
+    public void WriteMatchToFile(PlayerInfo matchedPlayerInfo)
+    {
+        File.AppendAllText(path, "Addressee name: " + matchedPlayerInfo.playerName.ToString() + "\n" + "Addressee's character: " + matchedPlayerInfo.characterName + "\n" + "Address: " + matchedPlayerInfo.playerAddress + "\n" + "\n");
     }
 }

@@ -8,26 +8,34 @@ using UnityEngine.UI;
 public class buttonController : MonoBehaviour
 {
     public static buttonController instance;
-    public TextMeshProUGUI titleText;
-    public Button beginButton;
-    public TextMeshProUGUI writeLetterAbout;
+
+    public GameObject beginningHolder;
+    public GameObject promptHolder;
+    public GameObject postPromptHolder;
+    public GameObject identityHolder;
+    public GameObject matchHolder;
+
     public TextMeshProUGUI promptText;
     public TextMeshProUGUI questionText;
-    public Button acceptPromptButton;
-    public Button rejectPromptButton;
-    public TextMeshProUGUI postPickText;
-    public Button restartButton;
+
+    public TextMeshProUGUI addressee;
+    public TextMeshProUGUI address;
+
+    public Button AlexandraButton;
+    public Button AmiraButton;
+    public Button InesButton;
+    public Button MarenButton;
+    public Button SiobhanButton;
+    public Button SylviaButton;
+
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
-        promptText.gameObject.SetActive(false);
-        questionText.gameObject.SetActive(false);
-        acceptPromptButton.gameObject.SetActive(false);
-        rejectPromptButton.gameObject.SetActive(false);
-        writeLetterAbout.gameObject.SetActive(false);
-        postPickText.gameObject.SetActive(false);
-        restartButton.gameObject.SetActive(false);
+        promptHolder.SetActive(false);
+        postPromptHolder.SetActive(false);
+        identityHolder.SetActive(false);
+        matchHolder.SetActive(false);
     }
 
     // Update is called once per frame
@@ -38,44 +46,51 @@ public class buttonController : MonoBehaviour
 
     public void BeginButtonPress()
     {
-        titleText.gameObject.SetActive(false);
-        beginButton.gameObject.SetActive(false);
-        writeLetterAbout.gameObject.SetActive(true);
-        promptText.gameObject.SetActive(true);
-        questionText.gameObject.SetActive(true);
-        acceptPromptButton.gameObject.SetActive(true);
-        rejectPromptButton.gameObject.SetActive(true);
+        beginningHolder.SetActive(false);
+        identityHolder.SetActive(true);
+
+    }
+
+    public void IdentityButtonPress(GameObject justPressedButton)
+    {
+        justPressedButton.SetActive(false);
+        promptHolder.SetActive(true);
+        identityHolder.SetActive(false);
 
         SpreadsheetParser.instance.RandomPromptPicker(promptText, questionText);
+
     }
 
     public void AcceptButtonPress()
     {
-        Debug.Log("RUNNING ACCEPTBUTTONPRESS");
+        SpreadsheetParser.instance.WritePromptToFile(SpreadsheetParser.instance.currentTextIndex);
         SpreadsheetParser.instance.RemoveDictionaryKey(SpreadsheetParser.instance.currentTextIndex);
-        promptText.gameObject.SetActive(false);
-        questionText.gameObject.SetActive(false);
-        acceptPromptButton.gameObject.SetActive(false);
-        rejectPromptButton.gameObject.SetActive(false);
-        writeLetterAbout.gameObject.SetActive(false);
-        postPickText.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(true);
+
+        promptHolder.SetActive(false);
+        matchHolder.SetActive(true);
+        addressee.text = PlayerMatcher.instance.matchedPlayerInfo.characterName;
+        address.text = PlayerMatcher.instance.matchedPlayerInfo.playerAddress;
 
     }
 
     public void RejectButtonPress()
     {
-        Debug.Log("RUNNING REJECTBUTTONPRESS");
         SpreadsheetParser.instance.RandomPromptPicker(promptText, questionText);
     }
 
     public void RestartButtonPress()
     {
-        postPickText.gameObject.SetActive(false);
-        titleText.gameObject.SetActive(true);
-        beginButton.gameObject.SetActive(true);
-        restartButton.gameObject.SetActive(false);
+        postPromptHolder.SetActive(false);
+        beginningHolder.SetActive(true);
 
+    }
+
+    public void AcceptAddresseeButtonClick()
+    {
+        matchHolder.SetActive(false);
+        postPromptHolder.SetActive(true);
+        PlayerMatcher.instance.ResetMatchList();
+        SpreadsheetParser.instance.WriteMatchToFile(PlayerMatcher.instance.matchedPlayerInfo);
     }
 
 }
