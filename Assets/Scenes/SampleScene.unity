@@ -2679,6 +2679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff076ec390ff23d4c8cbc74041af5da6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  promptSpreadsheet: {fileID: 4900000, guid: 3b858bf7847224440a3c86af505f2e60, type: 3}
   currentTextIndex: 0
 --- !u!4 &900527402
 Transform:

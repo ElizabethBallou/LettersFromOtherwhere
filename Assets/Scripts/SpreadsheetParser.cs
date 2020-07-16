@@ -7,20 +7,20 @@ using System.IO;
 public class SpreadsheetParser : MonoBehaviour
 {
     public static SpreadsheetParser instance;
-    private TextAsset promptSpreadsheet;
+    public TextAsset promptSpreadsheet;
     private Dictionary<int, string[]> promptDictionary;
     private int dictionaryIDAssigner = 0;
     [HideInInspector]
     public int currentTextIndex = 0;
     private bool pickNewNum = false;
     private string path;
+    private bool firstTimeWritingToFile = true;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
         promptDictionary = new Dictionary<int, string[]>();
-        promptSpreadsheet = Resources.Load<TextAsset>("LFO prompts");
         string[] rowEntries = promptSpreadsheet.text.Split('\n');
         
         foreach (string row in rowEntries)
@@ -32,7 +32,7 @@ public class SpreadsheetParser : MonoBehaviour
 
         Debug.Log("The count of promptDictionary is " + promptDictionary.Count);
 
-       path = Application.dataPath + "/log.txt";
+       path = Application.dataPath + "/AssignmentLog.txt";
 
     }
 
@@ -84,9 +84,19 @@ public class SpreadsheetParser : MonoBehaviour
 
     public void WriteNameToFile(string camperName)
     {
-        if (!File.Exists(path))
+        if (firstTimeWritingToFile)
         {
-            File.WriteAllText(path, "Letter writer: " + camperName + "\n");
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, "Letter writer: " + camperName + "\n");
+            }
+            else
+            {
+                File.WriteAllText(path, "");
+                File.AppendAllText(path, "Letter writer: " + camperName + "\n");
+            }
+
+            firstTimeWritingToFile = false;
         }
         else
         {
