@@ -21,7 +21,6 @@ public class buttonController : MonoBehaviour
     public TextMeshProUGUI address;
 
     public Button AlexandraButton;
-    public Button AmiraButton;
     public Button InesButton;
     public Button MarenButton;
     public Button SiobhanButton;
@@ -90,6 +89,16 @@ public class buttonController : MonoBehaviour
         postPromptHolder.SetActive(true);
         PlayerMatcher.instance.ResetMatchList();
         SpreadsheetParser.instance.WriteMatchToFile(PlayerMatcher.instance.matchedPlayerInfo);
+        PlayerMatcher.instance.matchesSelectedThisRound.Add(PlayerMatcher.instance.matchedPlayerInfo);
+        Debug.Log("I have added " + PlayerMatcher.instance.matchedPlayerInfo.playerName.ToString() + " to matchesselectedthisround");
+    }
+
+    public void NewAddresseeButtonClick()
+    {
+        Debug.Log("I am picking a new addressee");
+        PlayerMatcher.instance.pickMatch(PlayerMatcher.instance.currentPlayerInfo);
+        addressee.text = PlayerMatcher.instance.matchedPlayerInfo.characterName;
+        address.text = PlayerMatcher.instance.matchedPlayerInfo.playerAddress;
     }
 
 }

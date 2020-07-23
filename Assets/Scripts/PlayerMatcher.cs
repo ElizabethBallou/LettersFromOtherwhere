@@ -10,21 +10,20 @@ public class PlayerMatcher : MonoBehaviour
     public PlayerInfo InesInfo;
     public PlayerInfo MarenInfo;
     public PlayerInfo SiobhanInfo;
-    public PlayerInfo AmiraInfo;
     public PlayerInfo AlexandraInfo;
     public PlayerInfo SylviaInfo;
-    private PlayerInfo currentPlayerInfo;
+    [HideInInspector] public PlayerInfo currentPlayerInfo;
     [HideInInspector] public PlayerInfo matchedPlayerInfo;
     private PlayerInfo[] allPlayerInfos;
     private List<PlayerInfo> possibleMatches;
-    private List<PlayerInfo> matchesSelectedThisRound;
+    [HideInInspector] public List<PlayerInfo> matchesSelectedThisRound;
 
     // Start is called before the first frame update
     void Start()
     {
         instance = this;
         possibleMatches = new List<PlayerInfo>();
-        allPlayerInfos = new PlayerInfo[] { InesInfo, MarenInfo, SiobhanInfo, AmiraInfo, AlexandraInfo, SylviaInfo };
+        allPlayerInfos = new PlayerInfo[] { InesInfo, MarenInfo, SiobhanInfo, AlexandraInfo, SylviaInfo };
         possibleMatches = allPlayerInfos.ToList();
         matchesSelectedThisRound = new List<PlayerInfo>();
     }
@@ -32,7 +31,7 @@ public class PlayerMatcher : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void pickMatch(PlayerInfo thisPlayerInfo)
@@ -74,12 +73,14 @@ public class PlayerMatcher : MonoBehaviour
                 
             }
         }
-
+        if (possibleMatches.Count < 1)
+        {
+            Debug.Log(thisPlayerInfo.playerName.ToString() + " has no possible matches :(");
+        }
         matchedPlayerInfo = possibleMatches[Random.Range(0, possibleMatches.Count-1)];
         Debug.Log("I have picked a match, and it is " + matchedPlayerInfo.playerName.ToString());
 
-        matchesSelectedThisRound.Add(matchedPlayerInfo);
-        Debug.Log("I have added " + matchedPlayerInfo.playerName.ToString() + " to matchesselectedthisround");
+        
 
 
     }
@@ -96,9 +97,6 @@ public class PlayerMatcher : MonoBehaviour
                     break;
                 case "Siobhan":
                     currentPlayerInfo = SiobhanInfo;
-                    break;
-                case "Amira":
-                    currentPlayerInfo = AmiraInfo;
                     break;
                 case "Alexandra":
                     currentPlayerInfo = AlexandraInfo;
@@ -127,7 +125,6 @@ public class PlayerMatcher : MonoBehaviour
             Ines,
             Maren,
             Siobhan,
-            Amira,
             Alexandra,
             Sylvia
         };
